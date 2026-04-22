@@ -1,14 +1,13 @@
 Shreeya Sharma, CS 35L - Tic Tac Toe
 
-My first step was trying to run the model program using npm run dev, but I received 
+SETUP: My first step was trying to run the model program using npm run dev, but I received 
 a vite command not found error. I realized it was because I hadn't installed the 
 dependencies for this project so I ran npm i and the dependencies were installed.
-Then I removed the original App component and created a new component called Board
-for the actual game.
 
-The Board component defines squares and setSquares using the useState hook, which I
-also had to import from react at the top of the file. squares is then set to an 
-Array with nine elements that are intiailized to null.
+GAME: Then I removed the original App component and created a new component called Board
+for the actual game. The Board component defines squares and setSquares using the 
+useState hook, which I also had to import from react at the top of the file. squares 
+is then set to an  Array with nine elements that are intiailized to null.
 
 Next, I created a Square component that takes a value prop, which can store X or O, 
 and returns a button that displays what is stored in the value prop. Each one has a 
