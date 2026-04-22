@@ -1,0 +1,74 @@
+Shreeya Sharma, CS 35L - Tic Tac Toe
+
+My first step was trying to run the model program using npm run dev, but I received 
+a vite command not found error. I realized it was because I hadn't installed the 
+dependencies for this project so I ran npm i and the dependencies were installed.
+Then I removed the original App component and created a new component called Board
+for the actual game.
+
+The Board component defines squares and setSquares using the useState hook, which I
+also had to import from react at the top of the file. squares is then set to an 
+Array with nine elements that are intiailized to null.
+
+Next, I created a Square component that takes a value prop, which can store X or O, 
+and returns a button that displays what is stored in the value prop. Each one has a 
+className of square to handle the CSS styling. Then, in the Board component, I made 
+three divs with three Square components, each one with the next index of squares 
+passed in as a value. Each div element has a className of board-row to handle the 
+styling and make the game look like a tic-tac-toe board. I then wrapped all of these
+divs in an empty <></> because otherwise I would get an error saying that JSX elements
+need a parent element.
+
+After this, I created a function in the Board component to have something happen 
+whenever a Square is clicked. In the Square component, I added an onSquareClick prop
+and added an onClick event handler to the button to be set to the onSquareClick prop.
+
+I then defined a function called handleClick inside the Board component, since the
+onSquareClick function was called in that component. The handleClick function takes one
+argument i, which should be a number representing the index of a square in the squares 
+array. When a Square is used in the Board component, I set onSquareClick to handleClick
+with a parameter of the index/number that the Square is from 0-8. I made sure to use the
+empty () => function format for handeClick inside onSquareClick because handleClick needs
+to be called when the square is clicked, not immediately, which created an infinite loop
+when I tried it out.
+
+I then realized that the game allows a player to click on the same box multiple times and
+override another player's move, which should not happen in tic-tac-toe. So, I added an if
+condition to the handleClick function, where if square[i] is not null, then the function
+would return without doing anything (because the square is already occupied). Then the 
+handleClick function creates a copy of squares using .slice() and puts it into a variable
+called nextSquares. Then, set nextSquares[i] to an X and call setSquares(nextSquares) to
+put the new array into squares. By using a copy I am able to briefly store the original 
+spots in case I need to go back to a previous move. This will probably be more handy when
+making the chorus lapilli game. 
+
+The next thing I had to take care of was allowing the other player, O, to take turns because 
+the code so far didn't include the O turn. I added another state to the Board component called
+xIsNext and setXIsNext, initialized to true using useState. Then I added an if/else to handeClick 
+where if xIsNext is true, then it would set nextSquares[i] to "X", otherwise "O". I also added the
+line SetXIsNExt(!xIsNext) under setSquares(nextSquares) so that the other player could play for
+the next move. When trying out the game however, I noticed that Xs and Os could override each
+other while playing so I added an if condition at the beginning of handleClick, where if squares[i]
+is not null, then the function would return without doing anything. This fixed the issue and the
+game worked.
+
+The last thing I had to do was stop the game when a player won. I added a function called
+calculateWinner at the bottom of the Board component that takes an array of squares as an argment.
+In this function, a two-dimensional array called lines is declared, with the 8 possible winning 
+square index combinations. Then I iterated through each row of the array and compared 
+squares[a], squares[b], and squares[c] of each row. If they all had the same value, then the 
+function would return the value at squares[a], which should be an X or O. If the loop finishes 
+iterating through row without returning then the function returns null to indicate no winner.
+
+Now I had to adjust the rest of the Board component to reflect the new logic to end the game. I 
+added an or statement to the first if statement in handeClick, where if squares[i] is not null 
+or calculateWinner(squares) returns a value that's not null, then the function returns without
+doing anything. Then, outside the handleClick function, I declared a variable called winner that 
+was set to the value returned by calculateWinner(squares) and a let variable called status. I 
+made status a let because it could potentially be changed at some point throughout the game. 
+I then added an if condition, where if winner is not a null value, then status is "Winner: " + 
+winner. Otherwise, status is a string indicating who the next player is depending on the value 
+of xIsNext. Finally, to display the status of the game,  I added a div element at the beginning
+of the return statements in Board, but still within the empty <></> with className status for the
+approrpiate styling and the variable value of status in between the div tags. This made the 
+game fully functional, as the game would end if a player won.
