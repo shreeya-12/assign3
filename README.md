@@ -9,5 +9,5 @@ The starter uses Vite modules, so mounting stays in `src/main.jsx`. Write your a
 
 - [x] Complete the [Tic-Tac-Toe React tutorial](https://react.dev/learn/tutorial-tic-tac-toe) while writing down notes in `tic-tac-toe.txt`. All changes should be made in `src/App.jsx`. Use `./helper dev` to view your changes.
 - [ ] Change Tic-Tac-Toe to conform with the Chorus Lapilli rules while writing down notes in `chorus-lapilli.txt`. Use `./helper dev` to view your changes.
-- [ ] Write test cases in `test_chorus_lapilli.py` to make sure your solution works. Run these tests using `./helper test`.
+- [x] Write test cases in `test_chorus_lapilli.py` to make sure your solution works. Run these tests using `./helper test`.
 - [ ] Create a ZIP file for submission to Gradescope. Running `./helper zip` will create a ZIP file called `assign.zip`.
