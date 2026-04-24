@@ -154,6 +154,44 @@ class TestChorusLapilli(unittest.TestCase):
         self.assertTileIs(tiles[0], self.SYMBOL_BLANK)
         tiles[0].click()
         self.assertTileIs(tiles[0], self.SYMBOL_X)
+    
+    def test_make_move(self):
+        '''check if two players can make a move'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+        tiles[0].click()
+        tiles[3].click()
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+        self.assertTileIs(tiles[3], self.SYMBOL_O)
+    
+    def test_win_game(self):
+        '''check if a valid combo of three wins a game'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+        tiles[0].click()
+        tiles[3].click()
+        tiles[1].click()
+        tiles[6].click()
+        tiles[2].click()
+        tiles[7].click()
+
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+        self.assertTileIs(tiles[1], self.SYMBOL_X)
+        self.assertTileIs(tiles[2], self.SYMBOL_X)
+
+    def test_move_piece(self):
+        '''check if a piece can be moved to another destination after first three moves'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+        tiles[0].click()
+        tiles[3].click()
+        tiles[1].click()
+        tiles[6].click()
+        tiles[5].click()
+        tiles[7].click()
+
+        tiles[5].click()
+        tiles[8].click()
+
+        self.assertTileIs(tiles[5], self.SYMBOL_BLANK)
+        self.assertTileIs(tiles[8], self.SYMBOL_X)
 
 
 # ================= [DO NOT MAKE ANY CHANGES BELOW THIS LINE] =================
