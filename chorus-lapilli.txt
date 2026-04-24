@@ -86,3 +86,6 @@ all the if (selected) statements to if (selected !== null) which fixed the top l
 autograder issues. The reason this was an issue was because 0 could be considerd falsy, making the previous 
 version of the condition not evaluate to true, which could have made the center rule and movement rules 
 not be measured properly.
+
+There are three tests in test_chorus_lapilli.py. One to test if a move has been made, one to test if a 
+specific winning combination has been made, and one to test if a piece has been moved.
