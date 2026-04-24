@@ -1,8 +1,4 @@
-import * as React from 'react'
-import * as ReactBootstrap from 'react-bootstrap'
 import { useState } from "react"
-
-const { Badge, Button, Card } = ReactBootstrap
 
 function Square({ value, onSquareClick }) {
   return <button className="square" onClick={onSquareClick}>{value}</button>;
@@ -12,17 +8,61 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
 
+  const [selected, setSelected] = useState(null);
+  let xPieces = squares.filter(s => s === "X").length;
+  let oPieces = squares.filter(s => s === "O").length;
+
   function handleClick(i) {
-    if (squares[i] || calculateWinner(squares)) {
+    if (calculateWinner(squares)) {
       return;
     }
 
     const nextSquares = squares.slice();
 
-    if (xIsNext) {
+    if (xIsNext && xPieces < 3) {
+      if (squares[i]) return;
       nextSquares[i] = "X";
-    } else {
+    } else if (!xIsNext && oPieces < 3) {
+      if (squares[i]) return;
       nextSquares[i] = "O";
+    } else if (xIsNext && xPieces === 3) {
+      if (selected !== null) {
+        if (isMovable(squares, selected, i, "X")) {
+          nextSquares[i] = squares[selected];
+          nextSquares[selected] = squares[i];
+          setSelected(null);
+          setSquares(nextSquares);
+          setXIsNext(!xIsNext);
+          return;
+        } else {
+          setSelected(null);
+          return;
+        }
+      } else {
+        if (squares[i] === "X") {
+          setSelected(i);
+          return;
+        }
+      }
+    } else if (!xIsNext && oPieces === 3) {
+      if (selected !== null) {
+        if (isMovable(squares, selected, i, "O")) {
+          nextSquares[i] = squares[selected];
+          nextSquares[selected] = squares[i];
+          setSelected(null);
+          setSquares(nextSquares);
+          setXIsNext(!xIsNext);
+          return;
+        } else {
+          setSelected(null);
+          return;
+        }
+      } else {
+        if (squares[i] === "O") {
+          setSelected(i);
+          return;
+        }
+      }
     }
 
     setSquares(nextSquares);
@@ -36,6 +76,9 @@ export default function Board() {
     status = "Winner: " + winner;
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
+    if (selected !== null) {
+      status += " select next destination";
+    }
   }
 
   return (
@@ -83,4 +126,34 @@ function calculateWinner(squares) {
   }
 
   return null;
+}
+
+function isMovable(squares, start, end, letter) {
+  if (squares[end]) return false;
+
+  const validIndices = [
+    [1, 3, 4],
+    [0, 2, 3, 4, 5],
+    [1, 4, 5],
+    [0, 1, 2, 4, 6, 7],
+    [0, 1, 2, 3, 5, 6, 7, 8],
+    [1, 2, 4, 7, 8],
+    [3, 4, 7],
+    [3, 4, 5, 6, 8],
+    [4, 5, 7]
+  ];
+
+  if (validIndices[start].includes(end) && squares[4] === letter && start !== 4) {
+    const newSquares = squares.slice();
+    newSquares[start] = squares[end];
+    newSquares[end] = squares[start];
+
+    if (calculateWinner(newSquares)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  return validIndices[start].includes(end);
 }

@@ -1,0 +1,104 @@
+Shreeya Sharma, CS 35L - Chorus Lapilli
+
+SETUP: same as Tic-Tac-Toe. Also requires Node.js and react.
+
+GAME: After having the Tic-Tac-Toe working, I added the xPieces and oPieces variables
+defined with let and assigned to squares.filter(s => s === "#").length, where # is the 
+letter of the current player. Then I removed squares[i] from the handleClick initial
+if/else block because a spot being occupied doesn't necessarily stop a move from 
+happening in this version of the game. I then added the selected and setSelected states 
+to keep track of the selected squares for a player's move after 3 pieces from each have 
+been placed on the board.
+
+
+- add xpieces opieces to track number of each player's pieces on board
+- remove squares[i] from initial handleclick condition
+- add if squares[i] logic to xisnext blocks
+- add selected, setSelected states to keep track of squares for the moves after 3 pieces placed
+- if not selected, set current square to null
+- add selected if/else to the status logic
+- isMovable --> checks if indices are valid and then returns null if not movable, end if movable
+    - used 2d array similar to lines bc it's so much easier than using a billion and/or
+- inside the movement logic, if isMovable returns true function sets spot to letter, selected
+    to null, sets xIsNext to opposite value and function returns
+- issue that nothing would happen  (no moves would be made if clicked on a piece) --> 
+    fix was, instead of defaulut return null for isMovable,
+    I had to return validIndices[start].includes(end) so that a piece could actually get moved
+    otherwise there would never be a movable spot and endless no spots played
+    - issue now: sometimes a fourth piece can be placed if an invalid move is made,
+        player can override another player's move
+    - added if (squares[end]) return false; to start of ismovable function bc 
+        that function should address this issue (and pieces are moving now if they can)
+    - issue: a player can click on other piece and move that, which removes that player's piece
+        and adds another piece of this player to the board (shouldn't happen)
+    - changed this in if/else blocks:
+          nextSquares[i] = "O"; OR nextSquares[i] = "X";
+          nextSquares[selected] = null;
+        TO THIS: because i'm trying to swap values in the array, not reassign, which I think was the issue
+          nextSquares[i] = squares[selected];
+          nextSquares[selected] = squares[i];
+    - now extra pieces aren't being added to the board
+    - CHANGE: in if/else in else statements for xisnext and pieces count,
+            if (squares[i] === "X") {
+                setSelected(i);
+            }
+        before it was just setSelected(i); which was probably allowing the player to select
+         the other player's pieces
+    - now moves are being skipped? --> moved return to this new if/else
+    - still after a while, moves aren't working as they should, sometimes the player can't make a move even if it is valid
+    - also i haven't done the revert to start of the move, it still just continues to next player if the move is invalid
+    - took out else {
+          setSelected(null);
+        }
+        from if/else for isMovable function call --> introduces bug with players 
+    - in top corner spot, moves aren't made for either player
+    - switch else setSelected(null) to else return; --> did not work as intended bc it
+        didn't clear selection but it also didn't let invalid move work
+        CHANGE: setSelected(null) and then return;
+    - WORKS!!!! --> defaults to start of the move now
+    - now the only blocking issue is any piece in index 0/top left corner is not moving even if the move is valid (when i'm playing the game)
+    - tried autograder: only failed test is repeated tile swaps have no issues 
+    - removed:  && squares[4] === letter && start !== 4 from isMovable --> this made me fail moving a tile when center is possessed must win so i put it back el oh el
+    - TRIAL AGAIN:  && start !== 4 --> removed from isMovable because what matters more is winning move --> and it also did not work :(
+    - issue might've been the fact that the calculateWinner function returns letter or winner or null
+        --> in isMovable i added 
+            if (calculateWinner(newSquares)) {
+                return true;
+            } else {
+                return false;
+            } --> this way isMovable only returns true or false
+            IT DIDNT WORK ON THE AUTOGRADER :((((( but i'll keep this change because it seems cleaner than what I had before 
+    - based someone's reocmmndation on piazza --> I changed all the if (selected) to if (selected !== null)
+        --> this fixed the top left corner square not getting clicked
+        ---> THIS ALSO FIXED THE AUTOGRADER ISSUE YAY
+, so now i'm done :)
+
+
+After your first three moves, instead of adding further pieces 
+you must instead move one of your existing pieces to an adjacent 
+empty square. Therefore, after your third move you always occupy 
+three squares. The move can be up, down, left, right, or diagonal.
+
+If it is your turn to move and you have three pieces on the board 
+and one of your pieces is in the center square, your move must 
+either win or vacate the center square.
+
+The time travel functionality is not required or graded.
+
+Starting from the fourth move, one move is done by two clicks: 
+the first click selects the piece to move and the second click 
+selects the destination. Your app should correctly detect invalid 
+moves and revert to the start of the move after two clicks. Drap 
+and drop is not supported by the autograder.
+
+The autograder does not support pop-up or alert windows.
+
+The Chorus Lapilli tests interact with your application, clicking 
+tiles and measuring whether the content in tiles are expected. The 
+tile indices are listed below:
+
+tileIndices = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8]
+]
