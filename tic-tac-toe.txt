@@ -2,7 +2,8 @@ Shreeya Sharma, CS 35L - Tic Tac Toe
 
 SETUP: My first step was trying to run the model program using npm run dev, but I received 
 a vite command not found error. I realized it was because I hadn't installed the 
-dependencies for this project so I ran npm i and the dependencies were installed.
+dependencies for this project so I ran npm i and the dependencies were installed. This 
+game also requires Node.js and react.
 
 GAME: Then I removed the original App component and created a new component called Board
 for the actual game. The Board component defines squares and setSquares using the 
